@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boleto SafeTix</title>
+
+<style>
+    body {
+        background: #eef2f7;
+        font-family: "Inter", sans-serif;
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* TARJETA */
+    .ticket-card {
+        width: 330px;
+        background: white;
+        border-radius: 22px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0px 12px 32px rgba(0,0,0,0.22);
+        text-align: center;
+        transition: all 0.25s ease;
+    }
+
+    .ticket-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0px 16px 38px rgba(0,0,0,0.28);
+    }
+
+    /* BORDE HOLOGRÁFICO ANIMADO */
+    .holo-border {
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
+        padding: 2px;
+        background: linear-gradient(135deg,
+            #4f8cff, #5bc0ff, #3a7bff,
+            #7ecbff, #4c9dff, #5dbdff,
+            #4f8cff, #5bc0ff
+        );
+        background-size: 300% 300%;
+        animation: holoMove 6s ease infinite;
+        z-index: -1;
+    }
+
+    @keyframes holoMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .ticket-inner {
+        background: white;
+        border-radius: 20px;
+        padding-bottom: 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* BANNER */
+    .banner {
+        height: 120px;
+        background-size: cover;
+        background-position: center;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+    }
+
+    /* TEXTOS */
+    .safetix-label-top {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+        margin-top: 10px;
+    }
+
+    .title {
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+        padding: 0 10px;
+        line-height: 1.3;
+    }
+
+    .holder-name {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 3px;
+        font-weight: 600;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        color: #2563eb;
+        font-weight: 700;
+        margin-top: 6px;
+    }
+
+    .event-info {
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 14px;
+    }
+
+    /* QR BOX */
+    .qr-box {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        padding: 12px;
+        margin: 0 auto 10px;
+        overflow: hidden;
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.12);
+    }
+
+    /* SafeTix™ corner fold */
+    .qr-box::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 55px;
+        height: 55px;
+        background: linear-gradient(135deg, transparent 50%, #3b82f6 50%);
+        border-bottom-right-radius: 12px;
+        z-index: 3;
+    }
+
+    /* Scan bar */
+    .scan-bar {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: rgba(59,130,246,0.35);
+        box-shadow: 0 0 12px rgba(59,130,246,0.8);
+        animation: scan 2s linear infinite;
+        z-index: 2;
+    }
+
+    @keyframes scan {
+        0% { top: -40px; }
+        100% { top: 170px; }
+    }
+
+    #qr {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Pulse effect for QR */
+    .pulse {
+        animation: pulseAnim 0.35s ease;
+    }
+
+    @keyframes pulseAnim {
+        0% { transform: scale(1); filter: brightness(1); }
+        50% { transform: scale(1.05); filter: brightness(1.25); }
+        100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    .safetix-warning {
+        font-size: 11px;
+        color: #ef4444;
+        font-weight: 700;
+    }
+
+    .no-screenshot {
+        font-size: 11px;
+        color: #6b7280;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- TARJETA SAFE-TIX -->
+<div class="ticket-card">
+    <div class="holo-border"></div>
+
+    <div class="ticket-inner">
+
+        <!-- BANNER -->
+        <div class="banner" style="background-image:url('https://i.imgur.com/g2mDjyC.jpeg')"></div>
+
+        <div class="safetix-label-top">TICKETMASTER SAFETIX™</div>
+
+        <div class="title">Bad Bunny — DeBí TiRAR MáS FOToS World Tour 2025</div>
+
+        <!-- TITULAR -->
+        <div class="holder-name">Titular: <strong>Carlos Humberto Segura</strong></div>
+
+        <div class="subtitle">SEC NA-19 • FILA 20 • ASIENTO 11</div>
+
+        <div class="event-info">19 Dic 2025 | Estadio GNP Seguros · CDMX</div>
+
+        <!-- QR SafeTix -->
+        <div class="qr-box">
+            <div class="scan-bar"></div>
+            <canvas id="qr"></canvas>
+        </div>
+
+        <div class="safetix-warning">SafeTix™</div>
+        <div class="no-screenshot">No se permite ingresar con Captura de pantalla</div>
+
+    </div>
+</div>
+
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<script>
+    const qrCanvas = document.getElementById("qr");
+    const qr = new QRious({
+        element: qrCanvas,
+        size: 160,
+        value: "SAFE-TIX-INIT"
+    });
+
+    async function generateToken() {
+        const seed = "TM-" + Date.now() + "-" + Math.random();
+        const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed));
+        const bytes = Array.from(new Uint8Array(buffer));
+        return bytes.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function updateQR() {
+        const token = await generateToken();
+        qr.value = "SAFE-" + token;
+
+        qrCanvas.classList.remove("pulse");
+        void qrCanvas.offsetWidth;
+        qrCanvas.classList.add("pulse");
+    }
+
+    updateQR();
+    setInterval(updateQR, 5000);
+</script>
+
+</body>
+</html>
